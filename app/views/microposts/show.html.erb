@@ -1,0 +1,12 @@
+<article class="message is-dark">
+    <div class="message-header">
+        <%= @micropost.created_at.in_time_zone('EST') %>
+    </div>
+    <div class="message-body is-text">
+        <p>
+            <%= link_to @micropost.content, user_path(@micropost.user_id), style: "text-decoration: none" %>
+        </p>
+    </div>
+</article>
+<%= link_to 'Edit', edit_micropost_path(@micropost) %> |
+    <%= link_to 'Back', microposts_path %>

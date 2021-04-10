@@ -1,0 +1,42 @@
+<p id="notice">
+    <%= notice %>
+</p>
+
+<p>
+    <strong>User:</strong>
+    <%= @workout.user_id %>
+</p>
+
+<p>
+    <strong>Date:</strong>
+    <%= @workout.date %>
+</p>
+
+<p>
+    <strong>Content:</strong>
+    <%= @workout.content %>
+</p>
+
+<%= link_to 'Edit', edit_workout_path(@workout) %> |
+    <%= link_to 'Back', workouts_path %>
+
+
+        <div class=columns>
+            <div class=column>
+                <h1 class="title">Past Workouts</h1>
+                <% $workouts.each do |workout| %>
+                    <div class=card>
+                        <%= link_to image_tag(workout[:thumbnail_link], alt: workout[:name]), workout[:link], {:style=>'border-style: solid'} %>
+                    </div>
+                    <% end %>
+            </div>
+            <div class=column>
+                <h1 class="title">Create Workout</h1>
+                <section class="section">
+                    <div class="container">
+                        <%= render 'form', workout: @workout %>
+
+                    </div>
+                </section>
+            </div>
+        </div>

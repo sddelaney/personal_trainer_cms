@@ -1,0 +1,54 @@
+<%= form_with(model: user, local: true) do |form| %>
+    <% if user.errors.any? %>
+        <div id="error_explanation">
+            <h2>
+                <%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h2>
+
+            <ul>
+                <% user.errors.full_messages.each do |message| %>
+                    <li>
+                        <%= message %>
+                    </li>
+                    <% end %>
+            </ul>
+        </div>
+        <% end %>
+            <% if current_user.admin_role? %>
+                <div class="field">
+                    <%= form.label :name %>
+                        <%= form.text_field :name %>
+                </div>
+
+                <div class="field">
+                    <%= form.label :email %>
+                        <%= form.text_field :email %>
+                </div>
+                <% end %>
+                    <div class="field">
+                        <%= form.label :phone %>
+                            <%= form.text_field :phone %>
+                    </div>
+                    <div class="field">
+                        <%= form.label :address %>
+                            <%= form.text_area :address %>
+                    </div>
+                    <% if current_user.admin_role? %>
+                        <div class="field">
+                            <%= form.label :training_sessions %>
+                                <%= form.text_field :training_sessions %>
+                        </div>
+
+                        <div class="field">
+                            <%= form.label :notes %>
+                                <%= form.text_area :notes %>
+                        </div>
+                        <% end %>
+                            <div class="field">
+                                <%= form.label :medical %>
+                                    <%= form.text_area :medical %>
+                            </div>
+
+                            <div class="actions">
+                                <%= form.submit %>
+                            </div>
+                            <% end %>

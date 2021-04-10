@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+</head>
+
+<body>
+    <h1>Daily session report for LivNation:
+    </h1>
+    <p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Sessions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% @users.each do |user| %>
+                    <tr>
+                        <th>
+                            <%= user.name %>
+                        </th>
+                        <th>
+                            <%= user.training_sessions %>
+                        </th>
+                    </tr>
+                    <% end %>
+            </tbody>
+        </table>
+    </p>
+    <p>
+        To login to the site, just follow this link:
+        <%= @url %>.
+    </p>
+</body>
+
+</html>

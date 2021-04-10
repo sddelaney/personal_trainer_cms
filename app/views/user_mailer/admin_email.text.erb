@@ -1,0 +1,12 @@
+Daily session report for LivNation
+===============================================
+Users | Sessions
+<% @users.each do |user| %>
+  <%= user.name %>  
+  <%= user.training_sessions %>
+<% end %>
+
+
+To login to the site, just follow this link: <%= @url %>.
+
+Have a great day!

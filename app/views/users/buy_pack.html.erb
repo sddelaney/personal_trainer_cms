@@ -1,0 +1,56 @@
+<div>
+    <p class="title is-2 has-text-centered">
+        Buy Package For
+        <%= @user.name %>
+    </p>
+</div>
+
+
+<div class=section>
+    <div class="columns has-text-centered subtitle">
+        <% @packages.each do |package| %>
+
+
+            <div class='column'>
+                <%= link_to "
+                <div class='box'>
+                   <div class='subtitle is-4'>
+                         #{package.title}
+       </div>
+       </div>
+            </div>
+
+            ".html_safe, buy_pack_user_path(@user.id, :size=>package.sessions), method: :patch, data: { confirm: "Buy #{package.sessions} pack for #{@user.name}?" }%>
+                    <% end %>
+
+            </div>
+
+            <div class="tile is-ancestor has-text-centered">
+                <div class="tile is-parent is-6">
+                    <article class="tile is-child box">
+                        <p class="title is-3">History</p><br>
+                        <div class="content">
+                            <p>
+                                <% @user.microposts.order('created_at DESC').take(10).each do |micro| %>
+                                    <%= micro.created_at.to_date %>:
+                                        <%= micro.content %><br><br>
+                                            <% end.empty? and begin %>
+                                                <%= "None" %>
+                                                    <% end %>
+                            </p>
+                        </div>
+                    </article>
+                </div>
+                <% if current_user.admin_role? %>
+                    <div class="tile is-parent is-6">
+                        <article class="tile is-child box">
+                            <p class="title is-3">Notes</p><br>
+                            <div class="content">
+                                <%= simple_format(@user.notes) %>
+                            </div>
+                        </article>
+                    </div>
+                    <% end %>
+            </div>
+            <%= link_to 'Edit', edit_user_path(@user) %> |
+                <%= link_to 'Back', users_path %>

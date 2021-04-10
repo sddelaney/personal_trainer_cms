@@ -1,0 +1,55 @@
+.navbar {
+    height: 122px;
+    max-height: 10rem;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 14px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+.black_back :hover {
+    background-color: black;
+    color: white;
+}
+
+.navbar-item img {
+    max-height: 7.1rem;
+}
+
+#navwhite :hover {
+    background-color: rgb(255, 255, 255) !important;
+}
+
+.workout_area {
+    height: auto;
+    width: auto;
+}
+
+.button {
+    border-radius: 0;
+    text-transform: uppercase;
+    font-size: 14px;
+    letter-spacing: .1em;
+    font-weight: 400;
+}
+
+.hero {
+    font-weight: 400;
+    font-style: normal;
+    letter-spacing: .01em;
+    text-transform: none;
+    font-size: 15px;
+}
+
+.title {
+    font-weight: 400;
+    font-style: normal;
+    letter-spacing: 0em;
+    text-transform: none;
+    font-size: 42px;
+}
+
+.navbar-menu {
+    box-shadow: none
+}

@@ -1,0 +1,102 @@
+<div class="tile is-ancestor has-text-centered">
+    <div class="tile is-parent">
+        <article class="tile is-child box">
+            <p class="title is-3">Name</p><br>
+            <p class="subtitle is-5">
+                <%= @user.name %>
+            </p>
+        </article>
+    </div>
+    <div class="tile is-parent">
+        <article class="tile is-child box">
+            <p class="title is-3">Email</p><br>
+            <p class="subtitle is-5">
+                <%= @user.email %>
+            </p>
+        </article>
+    </div>
+    <div class="tile is-parent">
+        <article class="tile is-child box">
+            <p class="title is-3">Sessions</p><br>
+            <p class="subtitle is-5">
+                <%= @user.training_sessions %>
+            </p>
+        </article>
+    </div>
+</div>
+<% if current_user.admin_role? %>
+    <div class="tile is-ancestor has-text-centered">
+        <div class="tile is-parent">
+            <article class="tile is-child box">
+                <p class="title is-3">Phone</p><br>
+                <p class="subtitle is-5">
+                    <%= @user.phone %>
+                </p>
+            </article>
+        </div>
+        <div class="tile is-parent">
+            <article class="tile is-child box">
+                <p class="title is-3">Address</p><br>
+                <p class="subtitle is-5">
+                    <%= @user.address %>
+                </p>
+            </article>
+        </div>
+    </div>
+    <% end %>
+        <div class="tile is-ancestor has-text-centered">
+            <div class="tile is-parent is-6">
+                <article class="tile is-child box">
+                    <p class="title is-3">History</p><br>
+                    <div class="content">
+                        <p>
+                            <% @user.microposts.order('created_at DESC').take(10).each do |micro| %>
+                                <%= micro.created_at.in_time_zone('EST').to_date %>:
+                                    <%= micro.content %><br><br>
+                                        <% end.empty? and begin %>
+                                            <%= "None" %>
+                                                <% end %>
+                        </p>
+                    </div>
+                </article>
+            </div>
+            <div class="tile is-parent is-vertical is-6">
+                <% if current_user.admin_role? %>
+                    <article class="tile is-child box">
+                        <p class="title is-3">Notes</p><br>
+                        <div class="content">
+                            <%= simple_format(@user.notes) %>
+                        </div>
+                    </article>
+                    <% end %>
+                        <article class="tile is-child box">
+                            <p class="title is-3">Medical</p><br>
+                            <div class="content">
+                                <%= simple_format(@user.medical) %>
+                            </div>
+                        </article>
+            </div>
+        </div>
+        <div class="container">
+            <button class="button is-black mt-1">
+            <%= link_to 'BUY PACKAGE', buy_pack_user_path(@user.id), :style => 'color: white'; %>
+        </button>
+
+            <% if !@user.makeup || (Date.today - @user.makeup).to_i > 90 %>
+                <button class="button is-black mt-1">
+            <% if current_user.admin_role? %>
+                <%= link_to 'USE MAKEUP SESSION', use_makeup_user_path(@user.id), method: :patch, :style => 'color: white'; %>
+                <% else %>
+               Makeup available
+        <% end %>
+
+            </button>
+                <% else %>
+                    <button class="button is-light mt-1">Next Makeup available:
+<%=   @user.makeup + 90.days %> </button>
+                    <% end %>
+        </div><br>
+        <%= link_to 'Edit', edit_user_path(@user) %> |
+            <%= link_to 'Back', users_path %>
+
+                <%# link_to 'AUTH', @authuri %>

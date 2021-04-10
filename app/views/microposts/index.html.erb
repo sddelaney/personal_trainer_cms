@@ -1,0 +1,38 @@
+<div class="columns">
+    <div class="column is-10 is-offset-1">
+        <h1 class="title has-text-justified mt-2 pb-3" style="letter-spacing: 0em;">
+            History
+        </h1>
+        <p class="subtitle">
+            <table class="table is-fullwidth ">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Content</th>
+                        <th colspan="3"></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <% @microposts.order('created_at DESC').each do |micropost| %>
+                        <tr>
+                            <td class="is-vcentered ">
+                                <%= micropost.created_at.in_time_zone('EST').to_date %>
+                            </td>
+                            <td class="is-vcentered ">
+                                <%= link_to micropost.content, user_path(micropost.user_id) %>
+                            </td>
+                            <td class="is-vcentered ">
+                                <button class="button is-black ">
+                                <%= link_to 'Show', micropost, :style => 'color: white' %>
+                                </button>
+                            </td>
+                        </tr>
+                        <% end %>
+                </tbody>
+            </table>
+
+            <br>
+            <button class="button is-black ">
+            <%= link_to 'New Entry', new_micropost_path, :style => 'color: white' %>
+        </button>

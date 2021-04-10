@@ -1,0 +1,54 @@
+<div class="columns">
+    <div class="column is-10 is-offset-1">
+        <h1 class="title has-text-justified mt-2 pb-3">
+            Packages
+        </h1>
+        <p class="subtitle">
+            <table class="table is-fullwidth ">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Package Type</th>
+                        <th>Price</th>
+                        <th>Sessions</th>
+                        <th colspan="5"></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <% @packages.each do |package| %>
+                        <tr>
+                            <td class="is-vcentered ">
+                                <%= package.title %>
+                            </td>
+                            <td class="is-vcentered ">
+                                <%= package.description %>
+                            </td>
+                            <td class="is-vcentered ">
+                                <%= package.package_type %>
+                            </td>
+                            <td class="is-vcentered ">
+                                <%= package.price %>
+                            </td>
+                            <td class="is-vcentered ">
+                                <%= package.sessions %>
+                            </td>
+                            <td class="is-vcentered ">
+                                <button class="button is-black ">
+                        <%= link_to 'Edit', edit_package_path(package), :style => 'color: white' %>
+                        </button>
+                        </tr>
+                        <% end %>
+                </tbody>
+            </table>
+
+            <br>
+            <button class="button is-black ">
+    <%= link_to 'New Package', new_package_path, :style => 'color: white' %>
+
+    </button>
+        </p>
+    </div>
+
+</div>

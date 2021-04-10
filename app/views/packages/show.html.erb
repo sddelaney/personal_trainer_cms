@@ -1,0 +1,27 @@
+<p>
+    <strong>Title:</strong>
+    <%= @package.title %>
+</p>
+
+<p>
+    <strong>Description:</strong>
+    <%= @package.description %>
+</p>
+
+<p>
+    <strong>Type:</strong>
+    <%= @package.package_type %>
+</p>
+
+<p>
+    <strong>Price:</strong>
+    <%= @package.price %>
+</p>
+
+<p>
+    <strong>Sessions:</strong>
+    <%= @package.sessions %>
+</p>
+
+<%= link_to 'Edit', edit_package_path(@package) %> |
+    <%= link_to 'Back', packages_path %>

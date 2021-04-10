@@ -1,0 +1,54 @@
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Get all "navbar-burger" elements
+        const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+        // Check if there are any navbar burgers
+        if ($navbarBurgers.length > 0) {
+            // Add a click event on each of them
+            $navbarBurgers.forEach(el => {
+                el.addEventListener('click', () => {
+                    // Get the target from the "data-target" attribute
+                    const target = el.dataset.target;
+                    const $target = document.getElementById(target);
+                    // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+                    el.classList.toggle('is-active');
+                    $target.classList.toggle('is-active');
+                });
+            });
+        }
+    });
+</script>
+
+<nav class="navbar mr-5" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+        <a class="navbar-item" href="/">
+            <%= image_tag('logo.svg') %>
+        </a>
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+    </div>
+    <div id="navbarBasicExample" class="navbar-menu">
+        <div class="navbar-end">
+            <div class="navbar-item is-family-primary">
+                <% if current_user && current_user.admin_role? %>
+                    <%= link_to "Clients", users_path, id: "navwhite", class: "navbar-item" %>
+                        <%= link_to "Packages", packages_path, class: "navbar-item" %>
+                            <%= link_to "History", microposts_path, class: "navbar-item" %>
+                                <% elsif current_user %>
+                                    <%= link_to "#{current_user.name}", user_path(id: current_user.id), id: "navwhite", class: "navbar-item" %>
+                                        <% end %>
+                                            <% if user_signed_in? %>
+                                                <div class="buttons ml-5">
+                                                    <div class="buttons ml-5">
+                                                        <%= button_to 'SIGN OUT', '/user/sign_out', :method => :delete    , :class => 'button is-black ml-5',:style => 'color: white; background-color: black; border: none;'; %>
+                                                    </div>
+                                                </div>
+                                                <% end %>
+
+            </div>
+        </div>
+    </div>
+</nav>

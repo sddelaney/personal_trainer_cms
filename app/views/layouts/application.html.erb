@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <%= favicon_link_tag asset_path('favicon.png') %>
+        <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"> -->
+        <title></title>
+        <%= csrf_meta_tags %>
+            <%= csp_meta_tag %>
+
+                <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+                    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+</head>
+
+<%= render partial: "shared/navbar" %>
+
+    <body>
+        <div class="container">
+            <section class="hero is-family-primary">
+                <div class="hero-body">
+
+                    <%= yield %>
+                </div>
+            </section>
+        </div>
+        <div class="section">
+
+        </div>
+    </body>
+
+    <%= render partial: "shared/footer" %>
+
+
+</html>

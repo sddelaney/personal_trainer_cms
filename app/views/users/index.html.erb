@@ -1,0 +1,72 @@
+<div class="columns">
+    <div class="column is-8 is-offset-1">
+
+        <h1 class="title has-text-justified mt-2 pb-3">
+            <% if current_user.admin_role? %>Clients
+                <% else %>Welcome
+                    <%= current_user.name %>!
+                        <% end %>
+        </h1>
+
+        <p class="subtitle">
+            <table class="table is-fullwidth ">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Sessions</th>
+                        <th colspan="4"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% @users.each do |user| %>
+                        <% if can? :manage, user %>
+                            <tr>
+                                <td class="is-vcentered ">
+                                    <%= user.name %>
+                                </td>
+
+                                <td class="is-vcentered">
+                                    <%= user.training_sessions %>
+                                </td>
+                                <td class="is-vcentered">
+
+                                    <button class="button is-black mr-1 mb-1">
+                                                           <% if session[:token] %>
+                                                           <%= link_to 'TRAIN', @authuri, :style => 'color: white'; %>
+                                                           <% else %>
+                                                           <%= link_to 'TRAIN', workout_user_path(user.id), :style => 'color: white'; %>
+                                                           <% end %>
+                                                       </button>
+
+                                    <div class="dropdown" onclick="this.classList.toggle('is-active');">
+                                        <div class="dropdown-trigger">
+                                            <button class="button has-text-centered is-black" aria-haspopup="true" aria-controls="dropdown-menu">
+                                                <span class="icon is-small">
+                                                    <i class="fa fa-angle-down" aria-hidden="true"></i>
+                                                </span>
+                                            </button>
+                                        </div>
+                                        <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                                            <div class="dropdown-content">
+                                                <%= link_to 'INFO', user, :class=>"dropdown-item black_back" %>
+                                                    <%= link_to 'EDIT', edit_user_path(user), :class=>"dropdown-item black_back" %>
+                                                        <%= link_to 'BUY PACKAGE', buy_pack_user_path(user.id), :class=>"dropdown-item black_back" %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+
+                            </tr>
+                            <% end %>
+                                <% end %>
+                </tbody>
+            </table>
+            <% if current_user.admin_role? %>
+                <button class="button is-black ">
+        <%= link_to 'New User', new_user_path, :style => 'color: white'; %>
+    </button>
+                <% end %>
+        </p>
+    </div>
+
+</div>

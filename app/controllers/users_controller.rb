@@ -7,8 +7,6 @@ class UsersController < ApplicationController
     @authuri = GoogleSlides.new.auth_uri
   end
   def show
-    #Working here
-    @authuri = GoogleSlides.new.auth_uri
   end
 
   def new
@@ -23,24 +21,23 @@ class UsersController < ApplicationController
       user.increment!(:training_sessions, by = params[:size].to_i)
       notif = "#{user.name} bought #{params[:size]} sessions for a new total of #{user.training_sessions} sessions."
       logger.info notif
-      #TwilioClient.new.send_text(notif)
       user.microposts << Micropost.new(content:notif, user_id: user.id)
       redirect_to user_path(user.id), notice: notif
-    else
+    else # GET
       package = Package.order('packages.sessions ASC').all
       @packages = package
     end
   end
 
   def use_makeup
-      user = User.find(params[:id])
-      user.increment!(:training_sessions, by = 1)
-      user.update(makeup: Date.today)
-      notif = "#{user.name} used make-up session for a new total of #{user.training_sessions} sessions."
-      logger.info notif
-      #TwilioClient.new.send_text(notif)
-      user.microposts << Micropost.new(content: notif, user_id: user.id)
-      redirect_to user_path(user.id), notice: notif
+    # Use make up session and set date used
+    user = User.find(params[:id])
+    user.increment!(:training_sessions, by = 1)
+    user.update(makeup: Date.today)
+    notif = "#{user.name} used make-up session for a new total of #{user.training_sessions} sessions."
+    logger.info notif
+    user.microposts << Micropost.new(content: notif, user_id: user.id)
+    redirect_to user_path(user.id), notice: notif
   end
 
 
@@ -88,15 +85,20 @@ class UsersController < ApplicationController
   end
 
   def workout
+    # Get last token or refresh
     t = Token.last
+    # If no token or refresh, re-establish Google auth
     unless t and t.refresh_token
       redirect_to GoogleSlides.new.auth_uri
       return
     end
+    # Set up the drive and slides service
     @drive = GoogleSlides.drive_setup(t.fresh_token) 
     @slides = GoogleSlides.slides_setup(t.fresh_token) 
     folder_id = nil
+    # Get folder of the user requested
     folder = @drive.list_files(q: "'#{ENV["PROGRAM_FOLDER"]}' in parents and name='#{@user.name}'", fields: "files(id)")
+    # If user dir doesn't exist, create it
     if folder.files.empty?
       new_folder = Google::Apis::DriveV3::File.new
       new_folder.name = @user.name
@@ -108,16 +110,22 @@ class UsersController < ApplicationController
     unless folder.files.empty?
       folder_id = folder.files[0].id.to_s
       work = Hash.new
-      files = @drive.list_files(q: "'#{folder_id}' in parents and not trashed", order_by: "createdTime desc", fields: "files(name, id, parents, web_view_link)")
+      # Get past workouts
+      files = @drive.list_files(q: "'#{folder_id}' in parents and not trashed", 
+                                order_by: "createdTime desc", 
+                                fields: "files(name, id, parents, web_view_link)")
       # Only display the last 4 sessions
       files.files[0..3].each do |file|
         work[file.id] = Hash.new
         work[file.id]["link"] = file.web_view_link
+        # Get page elements from presentation
         elements = @slides.get_presentation(file.id).slides[0].page_elements
         elements.each do |ele|
+          # Each element on the slide - check if its a text region
           if ele.shape.text
             work[file.id][ele.title] = []
             ele.shape.text.text_elements.each do |txt|
+              # Fill workouts with content from slide
               if txt.text_run and txt.text_run.content and txt.text_run.content != "\n"
                 work[file.id][ele.title] << txt.text_run.content
               end
@@ -133,7 +141,8 @@ class UsersController < ApplicationController
       type = []
       content = []
 
-      # Move the params in case starting one is empty
+      # Accepts blank or filled params to format new slide correctly
+      # Offset the params in case starting one is empty
       for i in 1..4 do 
         unless params["content#{i}"].blank? and params["type#{i}"].blank?
           content.push(params["content#{i}"])
@@ -144,11 +153,14 @@ class UsersController < ApplicationController
       
       # Select template based on number of fields
       if field_count < 3
-        template_file = @drive.list_files(q: "'#{ENV["PROGRAM_FOLDER"]}' in parents and name='Template2'").files[0]
+        template_file = @drive.list_files(
+          q: "'#{ENV["PROGRAM_FOLDER"]}' in parents and name='Template2'").files[0]
       elsif field_count == 3
-        template_file = @drive.list_files(q: "'#{ENV["PROGRAM_FOLDER"]}' in parents and name='Template3'").files[0]
+        template_file = @drive.list_files(
+          q: "'#{ENV["PROGRAM_FOLDER"]}' in parents and name='Template3'").files[0]
       else
-        template_file = @drive.list_files(q: "'#{ENV["PROGRAM_FOLDER"]}' in parents and name='Template'").files[0]
+        template_file = @drive.list_files(
+          q: "'#{ENV["PROGRAM_FOLDER"]}' in parents and name='Template'").files[0]
       end
 
       # Copy template to new file
@@ -162,7 +174,9 @@ class UsersController < ApplicationController
       new_presentation = @slides.get_presentation(new_tmp_slide.id)
 
       # Replace place holders in template with content from params
-      requests = [replace_in_slide(place_holder='{{DATE}}',value=Time.now.in_time_zone('EST').strftime("%b %d %Y").upcase!)]
+      requests = [replace_in_slide(
+        place_holder='{{DATE}}',
+        value=Time.now.in_time_zone('EST').strftime("%b %d %Y").upcase!)]
 
       # Add extra new lines for proper formatting
       for i in 1..4 do
@@ -184,6 +198,7 @@ class UsersController < ApplicationController
         new_presentation.presentation_id,
         req
       )
+      # Reload workout page including newly created workout
       redirect_to workout_user_path
     else
     end

@@ -1,5 +1,6 @@
 class Oauth2Controller < ApplicationController
   def oauth2callback
+    # Set up Google Slides api
     @google_api = GoogleSlides.new
     @google_api.auth_client.code = params[:code] if params[:code]
     @google_api.auth_client.fetch_access_token!

@@ -16,16 +16,20 @@ class TrainingsessionsController < ApplicationController
   # Decrement sessions for user
   # POST /trainingsessions
   def create
+
     # If calendar event is not client session - skip it
     unless ["filter1", "filter2"].any? { |ignorable| params[:title].downcase.include? ignorable }
 
+      # Replace PT- if needed (virtual sessions) - case insensitive
       if user = User.where('lower(name) = ?', params[:title].sub("PT- ", "").downcase).first
         if user.training_sessions
           # TODO move this to user?
           # If two sessions happen within 5 hours it is likely a mistake from gcal
           unless user.last_session? && user.last_session > 5.hours.ago
             user.last_session = DateTime.now
+
             use_session(user)
+
           end
         else
           twilio("User #{params[:title]} had a session with none available.")
@@ -54,6 +58,7 @@ class TrainingsessionsController < ApplicationController
       logger.info notif
     end
     def restrict_access
+      # API Key required for session usage - set key and use in post request from webhooks
       api_key = ApiKey.find_by_access_token(params[:access_token])
       head :unauthorized unless api_key
     end  

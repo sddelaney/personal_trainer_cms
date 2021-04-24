@@ -3,6 +3,7 @@ class GoogleSlides
 
   def initialize
       client_secrets = Google::APIClient::ClientSecrets.load
+      Rails.logger.info "33333333333333#{ENV["HOSTNAME"]}"
       @auth_client = client_secrets.to_authorization 
       @auth_client.update!(
         # Reduce access of scope later

@@ -1,5 +1,5 @@
 /.bundle
-
+Gemfile.lock
 # Ignore the default SQLite database.
 /db/*.sqlite3
 /db/*.sqlite3-journal
@@ -12,11 +12,14 @@
 !/log/.keep
 !/tmp/.keep
 
-
+client_secrets.json
+*secrets*
 # Ignore uploaded files in development.
 /storage/*
 !/storage/.keep
-
+*.lock
+*/*.lock
+db/.schema.rb
 /public/assets
 .byebug_history
 # Ignore master key for decrypting credentials and more.

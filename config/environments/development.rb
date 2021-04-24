@@ -4,7 +4,7 @@ Rails.application.configure do
   # every request. This slows down response time but is perfect for development
   # since you don't have to restart the web server when you make code changes.
   config.cache_classes = false
-  config.web_console.whitelisted_ips = '192.168.1.0/16'
+#  config.web_console.whitelisted_ips = '192.168.1.0/16'
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.preview_path = "#{Rails.root}/tmp/mailers/previews"
@@ -26,7 +26,7 @@ Rails.application.configure do
   config.eager_load = false
   # Show full error reports.
   config.consider_all_requests_local = true
-  BetterErrors::Middleware.allow_ip! ENV['TRUSTED_IP'] if ENV['TRUSTED_IP']
+  #BetterErrors::Middleware.allow_ip! ENV['TRUSTED_IP'] if ENV['TRUSTED_IP']
   # Enable/disable caching. By default caching is disabled.
   # Run rails dev:cache to toggle caching.
   if Rails.root.join('tmp', 'caching-dev.txt').exist?
